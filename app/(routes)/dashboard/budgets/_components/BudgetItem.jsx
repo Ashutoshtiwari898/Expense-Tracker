@@ -1,8 +1,9 @@
 import React from 'react';
+import Link from 'next/link'; // Import Link from next/link
 
 function BudgetItem({ budget }) {
   return (
-    <div className='p-5 border rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-white'>
+    <Link href={`/dashboard/expenses/${budget?.id}`} className='p-5 border rounded-lg hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-white'>
       <div className='flex justify-between items-center'>
         <div className='flex gap-2 items-center'>
           <h2 className='text-2xl p-3 px-4 bg-slate-100 rounded-full'>
@@ -38,7 +39,7 @@ function BudgetItem({ budget }) {
           />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
