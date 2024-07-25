@@ -17,7 +17,7 @@ import { Budgets } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs'; // Ensure this import matches your setup
 import { db } from '@/utils/dbconfig'; // Ensure this import matches your setup
 
-function CreateBudget() {
+function CreateBudget({ refreshData }) {
     const [emojiIcon, setEmojiIcon] = useState('');
     const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
     const [name, setName] = useState('');
@@ -29,12 +29,13 @@ function CreateBudget() {
         const result = await db.insert(Budgets)
             .values({
                 name: name,
-                amount: amount,
+                amount: parseFloat(amount), // Ensure the amount is a number
                 createdBy: user?.primaryEmailAddress?.emailAddress,
                 icon: emojiIcon,
             }).returning({ insertedId: Budgets.id });
 
         if (result) {
+            refreshData();
             // Replace this with your toast library function if you have one
             alert('New Budget Created!');
         }
@@ -68,17 +69,22 @@ function CreateBudget() {
                                     </div>
                                 )}
                                 <div className='mt-2'>
-                                    <h2 className='text-black font-medium my-1 '>Budget Name</h2>
-                                    <Input placeholder="e.g. Home Decor"
-                                        onChange={(e) => setName(e.target.value)} />
+                                    <h2 className='text-black font-medium my-1'>Budget Name</h2>
+                                    <Input 
+                                        placeholder="e.g. Home Decor"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)} 
+                                    />
                                 </div>
                                 <div className='mt-2'>
-                                    <h2 className='text-black font-medium my-1 '>Budget Amount</h2>
+                                    <h2 className='text-black font-medium my-1'>Budget Amount</h2>
                                     <Input
-                                        type="number" placeholder="e.g. 1000$"
-                                        onChange={(e) => setAmount(e.target.value)} />
+                                        type="number" 
+                                        placeholder="e.g. 1000$"
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)} 
+                                    />
                                 </div>
-                                
                             </div>
                         </DialogDescription>
                     </DialogHeader>
@@ -86,7 +92,7 @@ function CreateBudget() {
                         <DialogClose asChild>
                             <Button
                                 disabled={!(name && amount)}
-                                onClick={() => onCreateBudget()} className='mt-5 w-full'>Create Budget</Button>
+                                onClick={onCreateBudget} className='mt-5 w-full'>Create Budget</Button>
                         </DialogClose>
                     </DialogFooter>
                 </DialogContent>
