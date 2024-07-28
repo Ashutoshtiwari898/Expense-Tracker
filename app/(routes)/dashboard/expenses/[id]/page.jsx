@@ -10,7 +10,7 @@ import BudgetItem from '../../budgets/_components/BudgetItem';
 import AddExpense from '../_components/AddExpense';
 import ExpenseListTable from '../_components/ExpenseListTable'; // Correct import
 import { Button } from '@/components/ui/button';
-import { Trash } from 'lucide-react';
+import { PenBox, Trash } from 'lucide-react';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -23,6 +23,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from 'react-toastify';
+import EditBudget from '../_components/EditBudget';
 
 function ExpensesScreen({ params }) {
     const { user } = useUser();
@@ -91,6 +92,10 @@ function ExpensesScreen({ params }) {
         <div className='p-10'>
             <h2 className='text-2xl font-bold flex justify-between items-center'>
                 My Expenses
+                <div className='flex gap-2 items-center'>
+                    <EditBudget budgetInfo={budgetInfo}
+                     refreshData={()=>getBudgetInfo()}/>
+                </div>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                         <Button className="flex gap-2" variant="destructive">
@@ -111,6 +116,7 @@ function ExpensesScreen({ params }) {
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
+                
             </h2>
             <div className='grid grid-cols-1 md:grid-cols-2 mt-6 gap-5'>
                 {budgetInfo ? (
