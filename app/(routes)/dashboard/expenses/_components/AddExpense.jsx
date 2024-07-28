@@ -5,12 +5,17 @@ import { db } from '@/utils/dbconfig';
 import { Budgets, Expenses } from '@/utils/schema';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { Loader } from 'lucide-react';
 
 function AddExpense({ budgetId, user,refreshData }) {
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
+    const[loading,SetLoading]=useState(false);
+
+
 
     const addNewExpense = async () => {
+        SetLoading(true)
         try {
             const result = await db.insert(Expenses).values({
                 name: name,
@@ -20,8 +25,10 @@ function AddExpense({ budgetId, user,refreshData }) {
                
             }).returning({insertedId:Budgets.id}); // Return all columns or specify fields if needed
 
-            console.log(result);
+            setAmount('');
+            setName('');
             if (result) {
+                SetLoading(false)
                 refreshData()
                 toast.success('New Expense Added!');
                 // Clear input fields after successful addition
@@ -59,7 +66,9 @@ function AddExpense({ budgetId, user,refreshData }) {
                 onClick={addNewExpense}
                 className="mt-3 w-full"
             >
-                Add New Expense
+                {loading?
+                <Loader className="animate-spin" />:"Add New Expense"}
+               
             </Button>
         </div>
     );

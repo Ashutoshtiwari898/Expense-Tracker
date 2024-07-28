@@ -37,6 +37,16 @@ function ExpensesScreen({ params }) {
         }
     }, [user, params.id]);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            if (user && params.id) {
+                fetchExpensesList();
+            }
+        }, 60000); // Auto-refresh every 60 seconds
+
+        return () => clearInterval(intervalId); // Clear interval on component unmount
+    }, [user, params.id]);
+
     const getBudgetInfo = async () => {
         try {
             const result = await db.select({
@@ -88,13 +98,27 @@ function ExpensesScreen({ params }) {
         }
     };
 
+    const deleteExpense = async (expense) => {
+        try {
+            const result = await db.delete(Expenses)
+                .where(eq(Expenses.id, expense.id))
+                .returning();
+
+            if (result) {
+                toast('Expense Deleted!');
+                fetchExpensesList();
+            }
+        } catch (error) {
+            console.error('Error deleting expense:', error);
+        }
+    };
+
     return (
         <div className='p-10'>
             <h2 className='text-2xl font-bold flex justify-between items-center'>
                 My Expenses
                 <div className='flex gap-2 items-center'>
-                    <EditBudget budgetInfo={budgetInfo}
-                     refreshData={()=>getBudgetInfo()}/>
+                    <EditBudget budgetInfo={budgetInfo} refreshData={() => getBudgetInfo()} />
                 </div>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
@@ -116,7 +140,6 @@ function ExpensesScreen({ params }) {
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
-                
             </h2>
             <div className='grid grid-cols-1 md:grid-cols-2 mt-6 gap-5'>
                 {budgetInfo ? (
@@ -131,14 +154,15 @@ function ExpensesScreen({ params }) {
                 />
             </div>
             <div className='mt-4'>
-                
                 <ExpenseListTable
                     expensesList={expensesList}
                     refreshData={getBudgetInfo}
-                /> {/* Correct component name */}
+                    deleteExpense={deleteExpense} // Pass deleteExpense function
+                />
             </div>
         </div>
     );
 }
 
 export default ExpensesScreen;
+

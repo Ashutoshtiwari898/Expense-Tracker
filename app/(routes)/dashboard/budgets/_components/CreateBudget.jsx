@@ -18,7 +18,7 @@ import { useUser } from '@clerk/nextjs'; // Ensure this import matches your setu
 import { db } from '@/utils/dbconfig'; // Ensure this import matches your setup
 
 function CreateBudget({ refreshData }) {
-    const [emojiIcon, setEmojiIcon] = useState('');
+    const [emojiIcon, setEmojiIcon] = useState('😄');
     const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
