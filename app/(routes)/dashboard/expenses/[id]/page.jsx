@@ -3,14 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '@/utils/dbconfig';
 import { Budgets, Expenses } from '@/utils/schema';
-import { eq, getTableColumns, sql } from 'drizzle-orm';
+import { desc, eq, getTableColumns, sql } from 'drizzle-orm';
 import { useUser } from '@clerk/nextjs';
 import BudgetItem from '../../budgets/_components/BudgetItem';
 import AddExpense from '../_components/AddExpense';
+import ExpenseListTable from '../_components/ExpenseListTable'; // Correct import
 
 function ExpensesScreen({ params }) {
     const { user } = useUser();
     const [budgetInfo, setBudgetInfo] = useState(null); // Initialize as null
+    const [expensesList, setExpensesList] = useState([]); // Fixed variable name
 
     useEffect(() => {
         if (user && params.id) {
@@ -32,9 +34,21 @@ function ExpensesScreen({ params }) {
             .groupBy(Budgets.id);
 
             setBudgetInfo(result[0] || null); // Handle empty result gracefully
-            
         } catch (error) {
             console.error('Error fetching budget info:', error);
+        }
+        fetchExpensesList(); // Ensure fetchExpensesList is called here
+    };
+
+    const fetchExpensesList = async () => {
+        try {
+            const result = await db.select().from(Expenses)
+                .where(eq(Expenses.budgetId, params.id))
+                .orderBy(desc(Expenses.id));
+            setExpensesList(result); // Fix typo 'ressult' to 'result'
+            console.log(result);
+        } catch (error) {
+            console.error('Error fetching expenses list:', error);
         }
     };
 
@@ -47,9 +61,17 @@ function ExpensesScreen({ params }) {
                 ) : (
                     <div className='h-[150px] w-full bg-slate-200 rounded-lg animate-pulse'></div>
                 )}
-                <AddExpense budgetId={params.id}
-                user={user}
-                refreshData={()=> getBudgetInfo()}/>
+                <AddExpense
+                    budgetId={params.id}
+                    user={user}
+                    refreshData={getBudgetInfo()}
+                />
+            </div>
+            <div className='mt-4'>
+                <h2 className='font-bold text-lg'>Latest Expenses</h2>
+                <ExpenseListTable expensesList={expensesList}
+                refreshData={()=>getBudgetInfo()}
+                /> {/* Correct component name */}
             </div>
         </div>
     );

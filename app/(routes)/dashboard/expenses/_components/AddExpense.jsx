@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { db } from '@/utils/dbconfig';
 import { Budgets, Expenses } from '@/utils/schema';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
 function AddExpense({ budgetId, user,refreshData }) {
     const [name, setName] = useState('');
@@ -15,7 +16,7 @@ function AddExpense({ budgetId, user,refreshData }) {
                 name: name,
                 amount: parseFloat(amount), // Ensure amount is a number
                 budgetId: budgetId,
-                createdAt: user?.primaryEmailAddress?.emailAddress, // Assuming this is the user identification
+                createdAt: moment().format('DD/MM/YYYY')// Assuming this is the user identification
                
             }).returning({insertedId:Budgets.id}); // Return all columns or specify fields if needed
 
