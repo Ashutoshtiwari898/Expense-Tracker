@@ -1,7 +1,7 @@
 "use client";
 import { Button } from '@/components/ui/button';
 import { PenBox } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { useUser } from '@clerk/nextjs';
 import { Input } from '@/components/ui/input';
@@ -23,10 +23,17 @@ import toast from 'react-hot-toast';
 function EditBudget({ budgetInfo, refreshData }) {
     const [emojiIcon, setEmojiIcon] = useState(budgetInfo?.icon || '');
     const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
-    const [name, setName] = useState(budgetInfo?.name || '');
-    const [amount, setAmount] = useState(budgetInfo?.amount || '');
+    const [name, setName] = useState();
+    const [amount, setAmount] = useState();
 
     const { user } = useUser();
+    useEffect(()=>{
+        if(budgetInfo){
+            setEmojiIcon(budgetInfo?.icon)
+            setName(budgetInfo?.name)
+            setAmount(budgetInfo?.amount)
+        }
+    },[budgetInfo])
 
     const onUpdateBudget = async () => {
         try {
