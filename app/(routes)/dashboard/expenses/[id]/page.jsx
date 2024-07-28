@@ -1,18 +1,34 @@
 "use client"; // Add this line at the top to mark the component as a Client Component
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'; // Correct import for Next.js app directory
+import { useUser } from '@clerk/nextjs';
 import { db } from '@/utils/dbconfig';
 import { Budgets, Expenses } from '@/utils/schema';
 import { desc, eq, getTableColumns, sql } from 'drizzle-orm';
-import { useUser } from '@clerk/nextjs';
 import BudgetItem from '../../budgets/_components/BudgetItem';
 import AddExpense from '../_components/AddExpense';
 import ExpenseListTable from '../_components/ExpenseListTable'; // Correct import
+import { Button } from '@/components/ui/button';
+import { Trash } from 'lucide-react';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from 'react-toastify';
 
 function ExpensesScreen({ params }) {
     const { user } = useUser();
     const [budgetInfo, setBudgetInfo] = useState(null); // Initialize as null
     const [expensesList, setExpensesList] = useState([]); // Fixed variable name
+    const router = useRouter(); // Correct variable name
 
     useEffect(() => {
         if (user && params.id) {
@@ -52,9 +68,50 @@ function ExpensesScreen({ params }) {
         }
     };
 
+    const deleteBudget = async () => {
+        try {
+            const deleteExpenseResult = await db.delete(Expenses)
+                .where(eq(Expenses.budgetId, params.id))
+                .returning();
+
+            if (deleteExpenseResult) {
+                await db.delete(Budgets)
+                    .where(eq(Budgets.id, params.id))
+                    .returning();
+            }
+
+            toast('Budget Deleted');
+            router.replace('/dashboard/budgets');
+        } catch (error) {
+            console.error('Error deleting budget:', error);
+        }
+    };
+
     return (
         <div className='p-10'>
-            <h2 className='text-2xl font-bold'>My Expenses</h2>
+            <h2 className='text-2xl font-bold flex justify-between items-center'>
+                My Expenses
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button className="flex gap-2" variant="destructive">
+                            <Trash /> Delete
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete your Budget
+                                and remove your data from our servers.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={deleteBudget}>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </h2>
             <div className='grid grid-cols-1 md:grid-cols-2 mt-6 gap-5'>
                 {budgetInfo ? (
                     <BudgetItem budget={budgetInfo} />
@@ -64,13 +121,14 @@ function ExpensesScreen({ params }) {
                 <AddExpense
                     budgetId={params.id}
                     user={user}
-                    refreshData={getBudgetInfo()}
+                    refreshData={getBudgetInfo}
                 />
             </div>
             <div className='mt-4'>
                 <h2 className='font-bold text-lg'>Latest Expenses</h2>
-                <ExpenseListTable expensesList={expensesList}
-                refreshData={()=>getBudgetInfo()}
+                <ExpenseListTable
+                    expensesList={expensesList}
+                    refreshData={getBudgetInfo}
                 /> {/* Correct component name */}
             </div>
         </div>
