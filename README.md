@@ -1,3 +1,42 @@
+Expense Tracking Website
+About
+
+This Expense Tracking Website is designed to help users manage their finances efficiently. It offers a clean and intuitive interface for recording, categorizing, and analyzing expenses, helping users gain better control over their spending.
+
+The platform is built using Next.js, Node.js, and Express, with Clerk used for secure user management and authentication. It ensures fast and secure data handling while providing real-time insights into user expenses.
+
+Features
+
+Secure user authentication using Clerk
+
+Add, edit, and delete expenses
+
+Categorize expenses for better tracking
+
+Real-time spending insights
+
+Responsive and user-friendly interface
+
+Tech Stack
+
+Frontend: Next.js
+
+Backend: Node.js, Express
+
+Authentication & User Management: Clerk
+
+
+
+How It Works
+
+Users sign up or log in securely using Clerk.
+
+Authenticated users record their expenses through the web interface.
+
+Expense data is stored in the database and associated with the Clerk user ID.
+
+The backend processes expense data and provides real-time insights.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
