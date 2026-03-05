@@ -2,48 +2,56 @@
 
 A modern **Expense Tracking Web Application** designed to help users manage and analyze their daily expenses efficiently. The platform provides a **clean, simple, and intuitive interface** where users can record expenses, categorize transactions, and visualize spending patterns.
 
-This application helps users understand their **financial habits**, monitor spending, and make **better budgeting decisions**.
+The application also includes **secure user authentication and authorization using Clerk**, allowing users to safely manage their personal expense data.
 
 ---
 
 # 🚀 FEATURES
 
-### 📊 Expense Management
-- Add daily expenses quickly
-- Edit or update expense records
-- Delete unnecessary entries
+## 📊 Expense Management
+- Add daily expenses quickly  
+- Edit or update expense records  
+- Delete unnecessary entries  
 
-### 🗂 Expense Categorization
-- Organize expenses into categories such as:
-  - Food
-  - Travel
-  - Bills
-  - Shopping
-  - Other expenses
+## 🗂 Expense Categorization
+Organize expenses into categories such as:
+- Food  
+- Travel  
+- Bills  
+- Shopping  
+- Other expenses  
 
-### 📈 Dashboard & Visualization
-- Visual charts for spending analysis
-- Easy-to-understand financial insights
-- Track where your money is going
+## 📈 Dashboard & Visualization
+- Visual charts for spending analysis  
+- Easy-to-understand financial insights  
+- Track where your money is going  
 
-### ⚡ Real-Time Updates
-- Newly added expenses appear instantly
-- Dashboard updates dynamically
+## ⚡ Real-Time Updates
+- Newly added expenses appear instantly  
+- Dashboard updates dynamically  
 
-### 📱 Responsive Design
-- Works smoothly on **desktop, tablet, and mobile devices**
+## 🔐 Authentication & Authorization
+- Secure **user authentication using Clerk**  
+- User **sign up and sign in functionality**  
+- Each user manages their **own expense data securely**  
+
+## 📱 Responsive Design
+Works smoothly on **desktop, tablet, and mobile devices**
 
 ---
 
 # 🛠 TECH STACK
 
-### **Frontend**
+## Frontend
 - **Next.js**
 - **Tailwind CSS**
 
-### **Backend**
+## Backend
 - **Node.js**
 - **Express.js**
+
+## Authentication
+- **Clerk Authentication & Authorization**
 
 ---
 
@@ -105,19 +113,20 @@ http://localhost:3000
 
 # 📊 HOW THE APPLICATION WORKS
 
-1. Users add expenses through the input form.
-2. The backend processes and stores expense data.
-3. The dashboard fetches stored data.
-4. Charts and analytics display spending insights.
+1. Users **sign up or log in using Clerk authentication**.
+2. After authentication, users can **add and manage their expenses**.
+3. The backend processes and stores expense data.
+4. The dashboard fetches stored data and displays **charts and insights**.
+5. Users can monitor their **spending patterns and financial habits**.
 
 ---
 
 # 📌 USE CASES
 
-- Personal finance tracking
-- Budget monitoring
-- Understanding spending habits
-- Expense data visualization
+- Personal finance tracking  
+- Budget monitoring  
+- Understanding spending habits  
+- Expense data visualization  
 
 ---
 
@@ -125,7 +134,7 @@ http://localhost:3000
 
 **Ashutosh Kumar Tiwari**
 
-GitHub:  
+GitHub  
 https://github.com/Ashutoshtiwari898
 
 ---
