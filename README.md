@@ -121,16 +121,6 @@ http://localhost:3000
 
 ---
 
-# 🔮 FUTURE IMPROVEMENTS
-
-- User authentication system
-- Export reports (PDF / Excel)
-- Advanced financial analytics
-- Dark mode
-- Mobile application version
-
----
-
 # 👨‍💻 AUTHOR
 
 **Ashutosh Kumar Tiwari**
